@@ -3,8 +3,6 @@ import React, {Component} from 'react';
 import Films from './Films';
 import TVs from './TVs';
 
-import initialData from '../data.json';
-
 class App extends Component {
   state = {
     data: {},
@@ -15,8 +13,16 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.setState({data: this.classifyTvShows(initialData)});
+    this.getData();
   }
+
+  /* Get data from http://localhost:3000/data.json */
+  getData = async () => {
+    const res = await fetch('data.json');
+    const data = await res.json();
+    const finalData = await this.classifyTvShows(data);
+    return this.setState({data: finalData});
+  };
 
   /* If the TV show has only one episode it should be shown in the Films feed */
   classifyTvShows = data => {
